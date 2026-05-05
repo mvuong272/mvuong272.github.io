@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>My Blog!</title>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg: #fffdf7;
+      --ink: #1c1c1c;
+      --muted: #666;
+      --sports:    #ff6b35;
+      --languages: #3b82f6;
+      --stories:   #a855f7;
+      --diary:     #22c55e;
+      --yellow: #fde047;
+      --hand: 'Caveat', cursive;
+      --body: 'Atkinson Hyperlegible', Georgia, serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--body);
+      line-height: 1.7;
+      cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20'%3E%3Ccircle cx='10' cy='10' r='4' fill='%23fde047' stroke='%231c1c1c' stroke-width='2'/%3E%3C/svg%3E") 10 10, auto;
+    }
+
+    /* wiggly underline utility */
+    .squiggle {
+      text-decoration: underline wavy var(--yellow) 3px;
+      text-underline-offset: 5px;
+    }
+
+    /* ── HEADER ───────────────────────── */
+    header {
+      padding: 1.5rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 2.5px solid var(--ink);
+      background: var(--bg);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .logo {
+      font-family: var(--hand);
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--ink);
+      text-decoration: none;
+      line-height: 1;
+    }
+
+    .logo .exclaim {
+      color: var(--sports);
+      display: inline-block;
+      animation: wobble 2s ease-in-out infinite;
+    }
+
+    @keyframes wobble {
+      0%, 100% { transform: rotate(-5deg); }
+      50% { transform: rotate(8deg); }
+    }
+
+    nav {
+      display: flex;
+      gap: 0.25rem;
+      flex-wrap: wrap;
+    }
+
+    .nav-pill {
+      font-family: var(--hand);
+      font-size: 1.1rem;
+      padding: 0.2rem 0.9rem;
+      border-radius: 999px;
+      border: 2px solid var(--ink);
+      background: transparent;
+      color: var(--ink);
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.15s, color 0.15s, transform 0.15s;
+      display: inline-block;
+    }
+
+    .nav-pill:hover {
+      transform: translateY(-2px) rotate(-1deg);
+    }
+
+    .nav-pill[data-cat="sports"]    { --pill: var(--sports); }
+    .nav-pill[data-cat="languages"] { --pill: var(--languages); }
+    .nav-pill[data-cat="stories"]   { --pill: var(--stories); }
+    .nav-pill[data-cat="diary"]     { --pill: var(--diary); }
+    .nav-pill[data-cat="all"]       { --pill: var(--yellow); }
+
+    .nav-pill.active, .nav-pill:hover {
+      background: var(--pill);
+      color: var(--ink);
+    }
+
+    /* ── HERO ──────────────────────────── */
+    .hero {
+      max-width: 860px;
+      margin: 5rem auto 3rem;
+      padding: 0 2rem;
+      text-align: center;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      font-family: var(--hand);
+      font-size: 1rem;
+      background: var(--yellow);
+      border: 2px solid var(--ink);
+      border-radius: 999px;
+      padding: 0.2rem 1rem;
+      margin-bottom: 1.5rem;
+      transform: rotate(-1deg);
+    }
+
+    .hero h1 {
+      font-family: var(--hand);
+      font-size: clamp(2.8rem, 7vw, 5rem);
+      font-weight: 700;
+      line-height: 1.1;
+      letter-spacing: -0.01em;
+      margin-bottom: 1.25rem;
+    }
+
+    .hero h1 .line2 {
+      display: block;
+      color: var(--sports);
+    }
+
+    .hero p {
+      font-size: 1.05rem;
+      color: var(--muted);
+      max-width: 520px;
+      margin: 0 auto 2.5rem;
+    }
+
+    .emoji-row {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      font-size: 2rem;
+      margin-bottom: 3rem;
+    }
+
+    .emoji-row span {
+      display: inline-block;
+      transition: transform 0.2s;
+    }
+
+    .emoji-row span:hover { transform: scale(1.4) rotate(10deg); }
+
+    /* ── DIVIDER ───────────────────────── */
+    .section-header {
+      max-width: 860px;
+      margin: 4rem auto 1.5rem;
+      padding: 0 2rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .section-header h2 {
+      font-family: var(--hand);
+      font-size: 2rem;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .section-header .dash {
+      flex: 1;
+      height: 2.5px;
+      background: var(--ink);
+      border-radius: 99px;
+    }
+
+    .section-header .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    /* ── POST LIST ─────────────────────── */
+    .posts {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+    }
+
+    /* ── POST ROW ──────────────────────── */
+    .post-row {
+      display: grid;
+      grid-template-columns: 56px 1fr auto;
+      align-items: center;
+      gap: 1.25rem;
+      padding: 1.1rem 0;
+      border-bottom: 1.5px dashed #ddd;
+      text-decoration: none;
+      color: var(--ink);
+      transition: background 0.15s;
+      border-radius: 8px;
+      padding-left: 0.5rem;
+      padding-right: 0.5rem;
+    }
+
+    .post-row:hover { background: var(--yellow); }
+    .post-row:hover .post-arrow { opacity: 1; transform: translateX(4px); }
+
+    .post-emoji {
+      font-size: 2rem;
+      text-align: center;
+      line-height: 1;
+    }
+
+    .post-info { min-width: 0; }
+
+    .post-title {
+      font-family: var(--body);
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 0.2rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .post-meta {
+      font-size: 0.78rem;
+      color: var(--muted);
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+    }
+
+    .post-tag {
+      display: inline-block;
+      padding: 0.05rem 0.5rem;
+      border-radius: 999px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: white;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .tag-sports    { background: var(--sports); }
+    .tag-languages { background: var(--languages); }
+    .tag-stories   { background: var(--stories); }
+    .tag-diary     { background: var(--diary); }
+
+    .post-arrow {
+      font-size: 1.2rem;
+      opacity: 0;
+      transition: opacity 0.15s, transform 0.15s;
+      flex-shrink: 0;
+    }
+
+    /* ── FEATURED POST ─────────────────── */
+    .post-featured {
+      max-width: 860px;
+      margin: 0 auto 0.5rem;
+      padding: 0 2rem;
+    }
+
+    .featured-card {
+      border: 2.5px solid var(--ink);
+      border-radius: 16px;
+      padding: 1.75rem 2rem;
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      background: var(--bg);
+      text-decoration: none;
+      color: var(--ink);
+      transition: transform 0.2s, box-shadow 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .featured-card::before {
+      content: '★ featured';
+      font-family: var(--hand);
+      font-size: 0.85rem;
+      position: absolute;
+      top: 0.6rem;
+      right: 1rem;
+      color: var(--muted);
+    }
+
+    .featured-card:hover {
+      transform: translate(-3px, -3px);
+      box-shadow: 6px 6px 0 var(--ink);
+    }
+
+    .featured-emoji { font-size: 3.5rem; flex-shrink: 0; }
+
+    .featured-title {
+      font-family: var(--hand);
+      font-size: 1.6rem;
+      font-weight: 700;
+      margin-bottom: 0.4rem;
+      line-height: 1.2;
+    }
+
+    .featured-excerpt {
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+
+    /* ── ADD CATEGORY ──────────────────── */
+    .add-section {
+      max-width: 860px;
+      margin: 4rem auto 0;
+      padding: 0 2rem;
+    }
+
+    .add-card {
+      border: 2.5px dashed #bbb;
+      border-radius: 16px;
+      padding: 2rem;
+      text-align: center;
+      cursor: pointer;
+      background: transparent;
+      font-family: var(--body);
+      width: 100%;
+      transition: border-color 0.2s, background 0.2s;
+    }
+
+    .add-card:hover {
+      border-color: var(--ink);
+      background: var(--yellow);
+    }
+
+    .add-card .big { font-size: 2rem; margin-bottom: 0.4rem; }
+    .add-card strong { display: block; font-size: 1rem; margin-bottom: 0.25rem; }
+    .add-card p { font-size: 0.85rem; color: var(--muted); }
+
+    /* ── HOW-TO ────────────────────────── */
+    .howto {
+      max-width: 860px;
+      margin: 2rem auto 0;
+      padding: 0 2rem;
+      display: none;
+    }
+
+    .howto-inner {
+      border: 2.5px solid var(--ink);
+      border-radius: 16px;
+      padding: 2rem;
+      background: #fffdf7;
+    }
+
+    .howto-inner h3 {
+      font-family: var(--hand);
+      font-size: 1.6rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .step {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1rem;
+      align-items: flex-start;
+    }
+
+    .step-num {
+      min-width: 26px;
+      height: 26px;
+      background: var(--ink);
+      color: var(--bg);
+      border-radius: 50%;
+      font-size: 0.75rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .step-text { font-size: 0.9rem; color: var(--muted); }
+    .step-text strong { color: var(--ink); }
+
+    code {
+      background: var(--yellow);
+      padding: 0.1em 0.35em;
+      border-radius: 4px;
+      font-size: 0.82em;
+      font-family: monospace;
+    }
+
+    /* ── FOOTER ────────────────────────── */
+    footer {
+      max-width: 860px;
+      margin: 5rem auto 0;
+      padding: 2rem;
+      text-align: center;
+      font-family: var(--hand);
+      font-size: 1.1rem;
+      color: var(--muted);
+      border-top: 2.5px solid var(--ink);
+    }
+
+    footer a { color: var(--sports); }
+
+    /* ── HIDDEN ────────────────────────── */
+    .cat-section.hidden { display: none; }
+
+    /* ── ANIMATIONS ────────────────────── */
+    @keyframes pop-in {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .hero, .post-featured, .posts, .section-header {
+      animation: pop-in 0.5s ease both;
+    }
+
+    /* ── RESPONSIVE ────────────────────── */
+    @media (max-width: 600px) {
+      header { flex-direction: column; gap: 0.75rem; padding: 1rem; }
+      .hero h1 { font-size: 2.5rem; }
+      .post-row { grid-template-columns: 40px 1fr auto; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <a class="logo" href="#">my blog<span class="exclaim">!</span></a>
+  <nav>
+    <button class="nav-pill active" data-cat="all"    onclick="filter('all',this)">all posts</button>
+    <button class="nav-pill" data-cat="sports"        onclick="filter('sports',this)">⚽ sports</button>
+    <button class="nav-pill" data-cat="languages"     onclick="filter('languages',this)">🌍 languages</button>
+    <button class="nav-pill" data-cat="stories"       onclick="filter('stories',this)">📖 stories</button>
+    <button class="nav-pill" data-cat="diary"         onclick="filter('diary',this)">📝 diary</button>
+  </nav>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-badge">✦ welcome to my little corner ✦</div>
+  <h1>
+    hi, i'm a person
+    <span class="line2">with too many hobbies.</span>
+  </h1>
+  <p>I write about sports I try, languages I'm learning, stories I make up, and whatever else is on my mind. Glad you're here!</p>
+  <div class="emoji-row">
+    <span title="sports">⚽</span>
+    <span title="languages">🌍</span>
+    <span title="stories">📖</span>
+    <span title="diary">📝</span>
+    <span title="chaos">✨</span>
+  </div>
+</section>
+
+<!-- ══ SPORTS ══════════════════════════════════ -->
+<div class="cat-section" data-cat="sports">
+  <div class="section-header">
+    <h2>⚽ sports</h2>
+    <div class="dash"></div>
+    <div class="dot" style="background:var(--sports)"></div>
+  </div>
+
+  <div class="post-featured">
+    <a class="featured-card" href="#">
+      <div class="featured-emoji">🏊</div>
+      <div>
+        <div class="featured-title">I Finally Swam a Full Mile!!</div>
+        <div class="featured-excerpt">Three months of early mornings, a lot of chlorine, and one very patient lifeguard. Here's how it went.</div>
+      </div>
+    </a>
+  </div>
+
+  <div class="posts">
+    <a class="post-row" href="#">
+      <div class="post-emoji">🏓</div>
+      <div class="post-info">
+        <div class="post-title">Trying Pickleball for the First Time</div>
+        <div class="post-meta">
+          <span class="post-tag tag-sports">Sports</span>
+          Apr 18, 2026 · 3 min read
+        </div>
+      </div>
+      <div class="post-arrow">→</div>
+    </a>
+    <a class="post-row" href="#">
+      <div class="post-emoji">🧗</div>
+      <div class="post-info">
+        <div class="post-title">Rock Climbing Humbled Me Completely</div>
+        <div class="post-meta">
+          <span class="post-tag tag-sports">Sports</span>
+          Mar 3, 2026 · 4 min read
+        </div>
+      </div>
+      <div class="post-arrow">→</div>
+    </a>
+  </div>
+</div>
+
+<!-- ══ LANGUAGES ════════════════════════════════ -->
+<div class="cat-section" data-cat="languages">
+  <div class="section-header">
+    <h2>🌍 languages</h2>
+    <div class="dash"></div>
+    <div class="dot" style="background:var(--languages)"></div>
+  </div>
+
+  <div class="posts">
+    <a class="post-row" href="#">
+      <div class="post-emoji">🇯🇵</div>
+      <div class="post-info">
+        <div class="post-title">Month 2 of Japanese: An Honest Update</div>
+        <div class="post-meta">
+          <span class="post-tag tag-languages">Languages</span>
+          Apr 28, 2026 · 4 min read
+        </div>
+      </div>
+      <div class="post-arrow">→</div>
+    </a>
+    <a class="post-row" href="#">
+      <div class="post-emoji">📱</div>
+      <div class="post-info">
+        <div class="post-title">Best Free Language Apps, Ranked Ruthlessly</div>
+        <div class="post-meta">
+          <span class="post-tag tag-languages">Languages</span>
+          Mar 15, 2026 · 6 min read
+        </div>
+      </div>
+      <div class="post-arrow">→</div>
+    </a>
+  </div>
+</div>
+
+<!-- ══ STORIES ══════════════════════════════════ -->
+<div class="cat-section" data-cat="stories">
+  <div class="section-header">
+    <h2>📖 stories</h2>
+    <div class="dash"></div>
+    <div class="dot" style="background:var(--stories)"></div>
+  </div>
+
+  <div class="posts">
+    <a class="post-row" href="#">
+      <div class="post-emoji">🚂</div>
+      <div class="post-info">
+        <div class="post-title">The Last Train to Nowhere</div>
+        <div class="post-meta">
+          <span class="post-tag tag-stories">Fiction</span>
+          Apr 5, 2026 · 8 min read
+        </div>
+      </div>
+      <div class="post-arrow">→</div>
+    </a>
+    <a class="post-row" href="#">
+      <div class="post-emoji">🌙</div>
+      <div class="post-info">
+        <div class="post-title">The Neighbour Who Only Came Out at Night</div>
+        <div class="post-meta">
+          <span class="post-tag tag-stories">Fiction</span>
+          Feb 20, 2026 · 5 min read
+        </div>
+      </div>
+      <div class="post-arrow">→</div>
+    </a>
+  </div>
+</div>
+
+<!-- ══ DIARY ════════════════════════════════════ -->
+<div class="cat-section" data-cat="diary">
+  <div class="section-header">
+    <h2>📝 diary</h2>
+    <div class="dash"></div>
+    <div class="dot" style="background:var(--diary)"></div>
+  </div>
+
+  <div class="posts">
+    <a class="post-row" href="#">
+      <div class="post-emoji">💭</div>
+      <div class="post-info">
+        <div class="post-title">On Starting a Blog (And Why It Took Me This Long)</div>
+        <div class="post-meta">
+          <span class="post-tag tag-diary">Diary</span>
+          May 1, 2026 · 2 min read
+        </div>
+      </div>
+      <div class="post-arrow">→</div>
+    </a>
+  </div>
+</div>
+
+<!-- ══ ADD CATEGORY ═════════════════════════════ -->
+<div class="add-section">
+  <button class="add-card" onclick="toggleHowto()">
+    <div class="big">＋</div>
+    <strong>add a new category!</strong>
+    <p>Food? Travel? Music? Gaming? Click for instructions.</p>
+  </button>
+</div>
+
+<!-- HOW-TO -->
+<div class="howto" id="howto">
+  <div class="howto-inner">
+    <h3>how to add a new category ✦</h3>
+
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-text"><strong>Add a nav button.</strong> In the <code>&lt;nav&gt;</code>, copy a <code>.nav-pill</code> button, update its <code>data-cat</code>, label, and <code>filter()</code> argument to your new category name.</div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-text"><strong>Add a color.</strong> In <code>:root</code>, add a CSS variable like <code>--travel: #f59e0b;</code> and add a matching <code>.tag-travel { background: var(--travel); }</code> rule.</div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-text"><strong>Copy a section block.</strong> Duplicate any <code>&lt;div class="cat-section"&gt;</code>, update its <code>data-cat</code>, the heading emoji + text, and the dot color.</div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-text"><strong>Add post rows.</strong> Inside the new section's <code>.posts</code> div, copy a <code>.post-row</code> link and update the emoji, title, tag class, date, and read time. Done!</div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">5</div>
+      <div class="step-text"><strong>Optional featured post.</strong> Copy the <code>.post-featured</code> block from the Sports section if you want a big highlighted card at the top of your new category.</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <p>made with enthusiasm and too many browser tabs 🌀 · <a href="#">back to top ↑</a></p>
+</footer>
+
+<script>
+  function filter(cat, btn) {
+    document.querySelectorAll('.nav-pill').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.cat-section').forEach(s => {
+      s.classList.toggle('hidden', cat !== 'all' && s.dataset.cat !== cat);
+    });
+  }
+
+  function toggleHowto() {
+    const el = document.getElementById('howto');
+    const visible = el.style.display === 'block';
+    el.style.display = visible ? 'none' : 'block';
+    if (!visible) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+</script>
+
+</body>
+</html>
